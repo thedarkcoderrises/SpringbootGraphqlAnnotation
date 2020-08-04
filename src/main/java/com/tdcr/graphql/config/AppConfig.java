@@ -2,6 +2,7 @@ package com.tdcr.graphql.config;
 
 import com.mongodb.MongoClient;
 import com.tdcr.graphql.directive.CustomDirectiveDef;
+import com.tdcr.graphql.directive.UpperCaseInstrumenation;
 import com.tdcr.graphql.service.PersonService;
 import graphql.GraphQL;
 import graphql.analysis.MaxQueryComplexityInstrumentation;
@@ -32,23 +33,29 @@ public class AppConfig {
     @Bean
     public GraphQL graphQL() {
 
+
+
         GraphQLSchema schema = new GraphQLSchemaGenerator()
                 .withResolverBuilders(
                         new AnnotatedResolverBuilder(),
                         new PublicResolverBuilder("com.tdcr.graphql"))
                 .withOperationsFromSingleton(personService)
+//                .withResolverInterceptors(new UpperCaseDirective())
                 .withValueMapperFactory(new JacksonValueMapperFactory())
-                .withAdditionalDirectives(CustomDirectiveDef.UpperDirective)
+                .withAdditionalDirectives(CustomDirectiveDef.UpperCaseDirective)
                 .generate();
+
+
         GraphQL graphQL = GraphQL.newGraphQL(schema)
                 .queryExecutionStrategy(new BatchedExecutionStrategy())
                 .instrumentation(new ChainedInstrumentation(Arrays.asList(
                         new MaxQueryComplexityInstrumentation(200),
                         new MaxQueryDepthInstrumentation(20),//This instrumentation controll how much depth we have have in graphql query.
 //                        TracingInstrumentation.Options.newOptions().includeTrivialDataFetchers()
-                        new TracingInstrumentation()
+                        new TracingInstrumentation(), new UpperCaseInstrumenation()
                 )))
                 .build();
+
 
         return graphQL;
     }

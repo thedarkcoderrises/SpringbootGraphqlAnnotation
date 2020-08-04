@@ -24,8 +24,6 @@ public class GraphQLController {
     public ExecutionResult execute(@RequestBody Map<String, Object> request) {
         return graphQL.execute(ExecutionInput.newExecutionInput()
                 .query((String) request.get("query"))
-                .operationName((String) request.get("operationName"))
-                .variables((Map<String, Object>) request.get("variables"))
                 .build());
     }
 }

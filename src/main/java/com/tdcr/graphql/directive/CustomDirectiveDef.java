@@ -8,12 +8,12 @@ import graphql.schema.GraphQLNonNull;
 
 public class CustomDirectiveDef {
 
-    public static final GraphQLDirective UpperDirective;
+    public static final GraphQLDirective UpperCaseDirective;
 
     public static final GraphQLDirective TimeoutDirective;
 
     static {
-        UpperDirective = GraphQLDirective.newDirective()
+        UpperCaseDirective = GraphQLDirective.newDirective()
                 .name("upper").description("UPPER_CASE")
                 .argument(GraphQLArgument.newArgument().name("isActive").
                         type(GraphQLNonNull.nonNull(Scalars.GraphQLBoolean))

@@ -7,6 +7,8 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersonService {
 
@@ -17,5 +19,10 @@ public class PersonService {
     @GraphQLQuery
     public Person person(@GraphQLArgument(name = "uid") Long uid){
         return personRepository.findById(uid).get();
+    }
+
+    @GraphQLQuery(name = "persons")
+    public List<Person> persons(){
+        return personRepository.findAll();
     }
 }

@@ -1,6 +1,5 @@
 package com.tdcr.graphql.entity;
 
-import com.tdcr.graphql.directive.Upper;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +17,6 @@ public class Person {
     @Id
     @GraphQLQuery(name = "person", description = "Person UID")
     long uid;
-    @Upper
     String name;
     int age;
     Date dob;
@@ -30,4 +28,6 @@ public class Person {
     public String getName() {
         return name;
     }
+
+
 }
