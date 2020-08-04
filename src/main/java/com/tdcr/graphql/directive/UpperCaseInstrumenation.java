@@ -18,8 +18,6 @@ public class UpperCaseInstrumenation extends SimpleInstrumentation {
 
         GraphQLFieldDefinition field = parameters.getField();
 
-
-
         DataFetcher dataFetcher = DataFetcherFactories.wrapDataFetcher(originalFetcher,
                 ((dataFetchingEnvironment, value) -> {
                     BooleanValue isActive;
