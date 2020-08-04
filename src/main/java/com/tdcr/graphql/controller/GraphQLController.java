@@ -3,6 +3,7 @@ package com.tdcr.graphql.controller;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +20,15 @@ public class GraphQLController {
     @Autowired
     private GraphQL graphQL;
 
+    @Autowired
+    DataLoaderRegistry dataLoaderRegistry;
+
     @PostMapping(value = "/graphql", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ExecutionResult execute(@RequestBody Map<String, Object> request) {
         return graphQL.execute(ExecutionInput.newExecutionInput()
                 .query((String) request.get("query"))
+                .dataLoaderRegistry(dataLoaderRegistry)
                 .build());
     }
 }

@@ -1,7 +1,5 @@
-package com.tdcr.graphql.entity;
+package com.tdcr.graphql.dto;
 
-import io.leangen.graphql.annotations.GraphQLId;
-import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,22 +11,15 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode
-@Document(collection = "person")
 public class Person {
 
-    @Id
-    @GraphQLId
-    @GraphQLNonNull
     @GraphQLQuery(name = "person", description = "Person UID")
     long uid;
     String name;
     int age;
     Date dob;
     String sex;
-    long addressId;
-    @GraphQLNonNull
-    @GraphQLQuery(name = "address", description = "address")
-    Address address;
+   long addressId;
     long vehicleId;
     List<Long> friends;
 

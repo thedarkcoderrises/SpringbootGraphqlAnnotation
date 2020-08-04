@@ -15,6 +15,9 @@ import io.leangen.graphql.GraphQLSchemaGenerator;
 import io.leangen.graphql.metadata.strategy.query.AnnotatedResolverBuilder;
 import io.leangen.graphql.metadata.strategy.query.PublicResolverBuilder;
 import io.leangen.graphql.metadata.strategy.value.jackson.JacksonValueMapperFactory;
+import org.dataloader.DataLoaderRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,20 +30,26 @@ import java.util.Arrays;
 @EnableMongoRepositories(basePackages = "com.tdcr.graphql")
 public class AppConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
+
     @Autowired
     PersonService personService;
 
+
+    @Bean
+    public DataLoaderRegistry dataLoaderRegistry(){
+        return new DataLoaderRegistry();
+    }
+
+
     @Bean
     public GraphQL graphQL() {
-
-
 
         GraphQLSchema schema = new GraphQLSchemaGenerator()
                 .withResolverBuilders(
                         new AnnotatedResolverBuilder(),
                         new PublicResolverBuilder("com.tdcr.graphql"))
                 .withOperationsFromSingleton(personService)
-//                .withResolverInterceptors(new UpperCaseDirective())
                 .withValueMapperFactory(new JacksonValueMapperFactory())
                 .withAdditionalDirectives(CustomDirectiveDef.UpperCaseDirective)
                 .generate();
@@ -52,7 +61,9 @@ public class AppConfig {
                         new MaxQueryComplexityInstrumentation(200),
                         new MaxQueryDepthInstrumentation(20),//This instrumentation controll how much depth we have have in graphql query.
 //                        TracingInstrumentation.Options.newOptions().includeTrivialDataFetchers()
-                        new TracingInstrumentation(), new UpperCaseInstrumenation()
+                        new TracingInstrumentation(),
+                        new UpperCaseInstrumenation()
+
                 )))
                 .build();
 
@@ -69,5 +80,7 @@ public class AppConfig {
     public MongoTemplate mongoTemplate()  throws Exception {
         return new MongoTemplate(mongo(), "grpahql");
     }
+
+
 
 }
